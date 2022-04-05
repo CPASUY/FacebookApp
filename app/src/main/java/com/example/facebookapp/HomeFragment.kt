@@ -1,7 +1,10 @@
 package com.example.facebookapp
 
 import android.app.Activity
+import android.content.Context
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +12,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.facebookapp.databinding.FragmentHomeBinding
+import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_home.*
 
 class HomeFragment : Fragment(),PublishFragment.OnNewPost {
@@ -49,8 +53,23 @@ class HomeFragment : Fragment(),PublishFragment.OnNewPost {
 
     }
 
-    override fun onNewPost(id: String, name: String, date: String, description: String) {
-        val post = Post("A","Carolina","22/02/2022",description)
+    override fun onNewPost(name:String,date:String,description:String,city:String,imagePost:String) {
+        val post = Post(name,date,description,city,imagePost)
         adapter.addPost(post)
+    }
+    override fun onPause() {
+        super.onPause()
+
+        val sharedPreferences = requireActivity().getPreferences(Context.MODE_PRIVATE)
+        adapter.onPause(sharedPreferences)
+
+    }
+    override fun onResume() {
+        super.onResume()
+
+        val sharedPreferences = requireActivity().getPreferences(Context.MODE_PRIVATE)
+        adapter.onResume(sharedPreferences)
+
+
     }
 }

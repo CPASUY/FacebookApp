@@ -17,4 +17,14 @@
         <item name="android:background">@drawable/buttonlogin</item>
         <item name="android:padding">4dp</item>
     </style>
+
+    <style name="DarkAppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+
+        <item name="colorPrimary">#393e46</item>
+        <item name="colorPrimaryVariant">#222831</item>
+        <item name="colorOnPrimary">#ffffff</item>
+        <item name="colorSecondary">#DAA8A8A8</item>
+        <item name="colorSecondaryVariant">#00fff5</item>
+        <item name="colorOnSecondary">@color/black</item>
+    </style>
 </resources>

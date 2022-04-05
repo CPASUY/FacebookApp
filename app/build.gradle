@@ -32,12 +32,13 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
-    viewBinding{
-        enabled=true
+    buildFeatures{
+        viewBinding=true
     }
 }
 
 dependencies {
+    implementation 'com.google.code.gson:gson:2.9.0'
     implementation("com.google.code.gson:gson:2.8.9")
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.2"
     implementation "androidx.recyclerview:recyclerview:1.1.0"

@@ -1,11 +1,15 @@
 package com.example.facebookapp
 
+import android.content.SharedPreferences
+import android.net.Uri
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.google.gson.Gson
 
 class PostAdapter : RecyclerView.Adapter<PostViewHolder>() {
-    private val posts = ArrayList<Post>()
+    private var posts = ArrayList<Post>()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder{
         var inflater = LayoutInflater.from(parent.context)
         val view = inflater.inflate(R.layout.postrow,parent,false)
@@ -18,12 +22,29 @@ class PostAdapter : RecyclerView.Adapter<PostViewHolder>() {
         holder.nameRow.text = post.name
         holder.dateRow.text = post.date
         holder.descriptionRow.text = post.description
+        holder.imagePostRow.setImageURI(Uri.parse(post.imagePost))
+    }
+    fun onPause(sharedPreferences: SharedPreferences){
+        val json = Gson().toJson(posts)
+        sharedPreferences.edit().putString("current",json).apply()
     }
     fun addPost(post:Post){
         posts.add(post)
+        Log.e(">>SIZEEEEEE>" ,getItemCount().toString(),)
+
     }
     override fun getItemCount(): Int {
         return posts.size
     }
+    fun onResume(sharedPreferences: SharedPreferences){
 
+        var json = sharedPreferences.getString("current","NO_DATA")
+        if(json != "NO_DATA"){
+            val array = Gson().fromJson<Array<Post>>(json.toString(),Array<Post>::class.java)
+            val serializable = ArrayList(array.toMutableList())
+            if(serializable.isNotEmpty()){
+                posts = serializable
+            }
+        }
+    }
 }

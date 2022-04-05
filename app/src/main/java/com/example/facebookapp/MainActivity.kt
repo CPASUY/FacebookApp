@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.example.facebookapp.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.gson.Gson
 
 class MainActivity : AppCompatActivity() {
 
@@ -20,9 +21,11 @@ class MainActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
+        val userActual = intent.getStringExtra("user")
+        var user = Gson().fromJson(userActual, User::class.java)
         homeFragment = HomeFragment.newInstance()
-        postFragment = PublishFragment.newInstance()
-        profileFragment = ProfileFragment.newInstance()
+        postFragment = PublishFragment.newInstance(user)
+        profileFragment = ProfileFragment.newInstance(user)
         //Suscripcion
         postFragment.listener = homeFragment
 

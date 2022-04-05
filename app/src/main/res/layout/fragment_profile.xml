@@ -6,7 +6,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/coverProfile"
         android:layout_width="0dp"
         android:layout_height="200dp"
         android:scaleType="centerCrop"
@@ -19,6 +19,7 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <ImageView
+        android:id="@+id/imageProfile"
         android:layout_width="200dp"
         android:layout_height="200dp"
         android:src="@drawable/perfil"
@@ -35,38 +36,104 @@
         android:layout_height="wrap_content"
         android:background="#ffffff "
         android:ems="10"
-        android:inputType="textPersonName"
+        android:inputType="none"
         android:text="Name"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.547"
+        app:layout_constraintHorizontal_bias="0.517"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.499" />
+        app:layout_constraintVertical_bias="0.462" />
 
     <Button
         android:id="@+id/editBtnProfile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Edit "
         android:background="#577fbc"
+        android:text="Edit "
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.34"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.619" />
+        app:layout_constraintVertical_bias="0.54" />
 
     <Button
         android:id="@+id/logOutBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Log Out"
         android:background="#577fbc"
+        android:text="Log Out"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.677"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.717" />
+        app:layout_constraintVertical_bias="0.54" />
+
+    <Button
+        android:id="@+id/cargarImageProfile"
+        style="?attr/materialButtonOutlinedStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#577fbc"
+        android:text="Upload profile picture"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.527"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.631"
+        app:strokeColor="@color/teal_200"
+        app:strokeWidth="2dp" />
+
+    <Button
+        android:id="@+id/cargarImagePortada"
+        style="?attr/materialButtonOutlinedStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#DAE3EF"
+        android:text="Upload cover picture"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.822"
+        app:strokeColor="@color/teal_200"
+        app:strokeWidth="2dp" />
+
+    <Button
+        android:id="@+id/tomarImageProfile"
+        style="?attr/materialButtonOutlinedStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#577fbc"
+        android:text="Take profile picture"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.472"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.724"
+        app:strokeColor="@color/teal_200"
+        app:strokeWidth="2dp" />
+
+    <Button
+        android:id="@+id/tomarImagePortada"
+        style="?attr/materialButtonOutlinedStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#FFFFFF"
+        android:text="Take cover picture"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.443"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.925" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
