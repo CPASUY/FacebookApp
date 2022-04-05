@@ -31,7 +31,7 @@ class PublishFragment(private val userActual:User) : Fragment() {
     private  var _binding:FragmentPublishBinding?= null
     private val binding get() = _binding!!
     private var permissionAccepted = false
-    var listener: OnNewPost?= null
+    var listener: OnNewPostListenner?= null
     var file: File? =null
     var image:String=""
 
@@ -78,8 +78,9 @@ class PublishFragment(private val userActual:User) : Fragment() {
                 val user = this.userActual.name.toString()
                 val city = binding.spinner.selectedItem.toString()
                 val description = binding.descPostText.text.toString()
+                Log.e("description",description)
                 val date = getCurrentDateTime().toString("yyyy/MM/dd HH:mm:ss")
-                if(description.isEmpty() or city.isEmpty() or date.isEmpty() ){
+                if(description.isEmpty() or city.isEmpty() or date.isEmpty() or image.isEmpty()){
                     Toast.makeText(activity,"Llene todos los datos para publicar el post",Toast.LENGTH_LONG).show()
                 }else{
                     it.onNewPost(user,date,description,city,image)
@@ -149,7 +150,7 @@ class PublishFragment(private val userActual:User) : Fragment() {
         return Calendar.getInstance().time }
 
 
-    interface OnNewPost{
+    interface OnNewPostListenner{
         fun onNewPost(name:String,date:String,description:String,city:String,imagePost:String)
     }
     companion object {

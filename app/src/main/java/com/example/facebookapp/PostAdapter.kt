@@ -26,10 +26,12 @@ class PostAdapter : RecyclerView.Adapter<PostViewHolder>() {
     }
     fun onPause(sharedPreferences: SharedPreferences){
         val json = Gson().toJson(posts)
+        Log.e("postsss",json.toString())
         sharedPreferences.edit().putString("current",json).apply()
     }
     fun addPost(post:Post){
         posts.add(post)
+        Log.e(">>SIZEEEEEE>" ,post.id.toString())
         Log.e(">>SIZEEEEEE>" ,getItemCount().toString(),)
 
     }
@@ -40,6 +42,7 @@ class PostAdapter : RecyclerView.Adapter<PostViewHolder>() {
 
         var json = sharedPreferences.getString("current","NO_DATA")
         if(json != "NO_DATA"){
+            Log.e("ERROR",json.toString())
             val array = Gson().fromJson<Array<Post>>(json.toString(),Array<Post>::class.java)
             val serializable = ArrayList(array.toMutableList())
             if(serializable.isNotEmpty()){

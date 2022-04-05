@@ -15,7 +15,7 @@ import com.example.facebookapp.databinding.FragmentHomeBinding
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_home.*
 
-class HomeFragment : Fragment(),PublishFragment.OnNewPost {
+class HomeFragment : Fragment(),PublishFragment.OnNewPostListenner {
 
     private var _binding:FragmentHomeBinding?= null
     private val binding get() = _binding!!
@@ -36,6 +36,8 @@ class HomeFragment : Fragment(),PublishFragment.OnNewPost {
         postRecycler.layoutManager = LinearLayoutManager(activity)
 
         postRecycler.adapter = adapter
+        val sharedPreferences = requireActivity().getPreferences(Context.MODE_PRIVATE)
+        adapter.onResume(sharedPreferences)
         // Inflate the layout for this fragment
         return view
     }
