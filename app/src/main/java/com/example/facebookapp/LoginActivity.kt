@@ -10,6 +10,9 @@ import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.serializer
+import java.io.BufferedReader
+import java.io.InputStreamReader
+import java.nio.file.Paths
 
 
 class LoginActivity : AppCompatActivity() {
@@ -18,7 +21,6 @@ class LoginActivity : AppCompatActivity() {
         val userBeta =  User("beta", "beta@gmail.com","aplicacionesmoviles")
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-
         loginButtonId.setOnClickListener{
 
             val username=editTextTextEmailAddress.text.toString()

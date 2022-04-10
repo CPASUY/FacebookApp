@@ -1,9 +1,9 @@
 package com.example.facebookapp
 
 import android.Manifest
-import android.R
 import android.app.Activity.RESULT_CANCELED
 import android.app.Activity.RESULT_OK
+import android.content.ContentResolver
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -44,7 +44,8 @@ class PublishFragment(private val userActual:User) : Fragment() {
         val cameralauncher = registerForActivityResult(StartActivityForResult(), :: cameraonResult)
         val galerylauncher = registerForActivityResult(StartActivityForResult(), :: galeryonResult)
 
-        binding.cameraBtn.setOnClickListener {
+        binding.photoPerfil.setImageURI(Uri.parse(userActual.profileImage))
+        binding.takePicture.setOnClickListener {
             requestPermissions(arrayOf(Manifest.permission.CAMERA,Manifest.permission.READ_EXTERNAL_STORAGE),1)
             if(permissionAccepted) {
                 val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
@@ -59,7 +60,8 @@ class PublishFragment(private val userActual:User) : Fragment() {
                 cameralauncher.launch(intent)
             }
         }
-        binding.galeryBtn.setOnClickListener {
+
+        binding.uploadPicture.setOnClickListener {
             requestPermissions(arrayOf(Manifest.permission.CAMERA,Manifest.permission.READ_EXTERNAL_STORAGE),1)
             if(permissionAccepted) {
 
@@ -70,7 +72,6 @@ class PublishFragment(private val userActual:User) : Fragment() {
                 intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                 galerylauncher.launch(intent)
             }
-
         }
         binding.publicarBtn.setOnClickListener {
 
@@ -78,7 +79,6 @@ class PublishFragment(private val userActual:User) : Fragment() {
                 val user = this.userActual.name.toString()
                 val city = binding.spinner.selectedItem.toString()
                 val description = binding.descPostText.text.toString()
-                Log.e("description",description)
                 val date = getCurrentDateTime().toString("yyyy/MM/dd HH:mm:ss")
                 if(description.isEmpty() or city.isEmpty() or date.isEmpty() or image.isEmpty()){
                     Toast.makeText(activity,"Llene todos los datos para publicar el post",Toast.LENGTH_LONG).show()
@@ -96,6 +96,7 @@ class PublishFragment(private val userActual:User) : Fragment() {
         if(result.resultCode == RESULT_OK){
             val bitmap = BitmapFactory.decodeFile(file?.path)
             val thumbnail = Bitmap.createScaledBitmap(bitmap, bitmap.width/4,bitmap.height/4,true)
+            binding.imageNewPost.visibility= View.VISIBLE
             binding.imageNewPost.setImageBitmap(thumbnail)
         }else if(result.resultCode == RESULT_CANCELED){
             file = null
@@ -112,7 +113,9 @@ class PublishFragment(private val userActual:User) : Fragment() {
             }
             val uriImage = result.data?.data
             uriImage?.let {
-                binding.imageNewPost.setImageURI(uriImage)
+                val bitmap = MediaStore.Images.Media.getBitmap(context?.contentResolver , uriImage)
+                binding.imageNewPost.visibility= View.VISIBLE
+                binding.imageNewPost.setImageBitmap(bitmap)
                 image=uriImage.toString()
                 Log.e(">>galeria>",image)
             }

@@ -40,13 +40,14 @@ class PostAdapter : RecyclerView.Adapter<PostViewHolder>() {
     }
     fun onResume(sharedPreferences: SharedPreferences){
 
-        var json = sharedPreferences.getString("current","NO_DATA")
+        var json = sharedPreferences.getString("currentPosts","NO_DATA")
         if(json != "NO_DATA"){
-            Log.e("ERROR",json.toString())
-            val array = Gson().fromJson<Array<Post>>(json.toString(),Array<Post>::class.java)
-            val serializable = ArrayList(array.toMutableList())
-            if(serializable.isNotEmpty()){
-                posts = serializable
+            if(posts.size==0){
+                val array = Gson().fromJson(json.toString(),Array<Post>::class.java)
+                val oldPosts = ArrayList(array.toMutableList())
+                if(oldPosts.isNotEmpty()){
+                    posts = oldPosts
+                }
             }
         }
     }

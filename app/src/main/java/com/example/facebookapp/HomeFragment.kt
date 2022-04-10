@@ -59,13 +59,14 @@ class HomeFragment : Fragment(),PublishFragment.OnNewPostListenner {
         val post = Post(name,date,description,city,imagePost)
         adapter.addPost(post)
     }
+
     override fun onPause() {
         super.onPause()
 
         val sharedPreferences = requireActivity().getPreferences(Context.MODE_PRIVATE)
         adapter.onPause(sharedPreferences)
 
-    }
+    }/*
     override fun onResume() {
         super.onResume()
 
@@ -73,5 +74,5 @@ class HomeFragment : Fragment(),PublishFragment.OnNewPostListenner {
         adapter.onResume(sharedPreferences)
 
 
-    }
+    }*/
 }

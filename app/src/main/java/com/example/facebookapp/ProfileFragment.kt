@@ -17,6 +17,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
@@ -51,50 +52,74 @@ class ProfileFragment(private val userActual:User) : Fragment() {
         val cameralauncherCover = registerForActivityResult(ActivityResultContracts.StartActivityForResult(), :: cameraonResultCover)
         val galerylauncherCover = registerForActivityResult(ActivityResultContracts.StartActivityForResult(), :: galeryonResultCover)
 
+        binding.imageProfile.setImageURI(Uri.parse(userActual.profileImage))
+        binding.coverProfile.setImageURI(Uri.parse(userActual.coverImage))
         binding.editBtnProfile.setOnClickListener {
             onEditButtonClicked()
         }
-
-        //binding.editTextTextPersonName.text = userActual.name
 
         binding.logOutBtn.setOnClickListener {
             val intent= Intent(context,LoginActivity::class.java)
             startActivity(intent)
         }
         binding.cargarImageProfile.setOnClickListener {
-            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
-            intent.addCategory(Intent.CATEGORY_OPENABLE)
-            intent.setType("image/*");
-            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-            galerylauncherProfile.launch(intent)
+            requestPermissions(arrayOf(
+                Manifest.permission.CAMERA,
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ),1)
+            Log.e(">>camara>","Ola")
+            if(permissionAccepted) {
+                Log.e(">>camara>","hbaer sisi")
+                val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
+                intent.addCategory(Intent.CATEGORY_OPENABLE)
+                intent.setType("image/*");
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                galerylauncherProfile.launch(intent)
+            }
 
         }
         binding.tomarImageProfile.setOnClickListener {
-            requestPermissions(arrayOf(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE),1)
+            requestPermissions(arrayOf(
+                Manifest.permission.CAMERA,
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ),1)
             if(permissionAccepted) {
+                Log.e(">>camara>","hbaer sisi")
                 val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
                 intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                 file = File("${activity?.getExternalFilesDir(null)}/photo.png")
                 val uri =
                     FileProvider.getUriForFile(requireContext(), context?.packageName!!, file!!)
-                userActual.profileImage=uri.toString()
-
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, uri)
+                userActual.profileImage=uri.toString()
                 cameralauncherProfile.launch(intent)
             }
         }
         binding.cargarImagePortada.setOnClickListener {
-            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
-            intent.addCategory(Intent.CATEGORY_OPENABLE)
-            intent.setType("image/*");
-            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-            galerylauncherCover.launch(intent)
+            requestPermissions(arrayOf(
+                Manifest.permission.CAMERA,
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ),1)
+            if(permissionAccepted) {
+                val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
+                intent.addCategory(Intent.CATEGORY_OPENABLE)
+                intent.setType("image/*");
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                galerylauncherCover.launch(intent)
+            }
         }
         binding.tomarImagePortada.setOnClickListener {
-            requestPermissions(arrayOf(Manifest.permission.CAMERA,Manifest.permission.READ_EXTERNAL_STORAGE),1)
+            requestPermissions(arrayOf(
+                Manifest.permission.CAMERA,
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ),1)
             if(permissionAccepted) {
                 val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
                 intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
@@ -102,11 +127,27 @@ class ProfileFragment(private val userActual:User) : Fragment() {
                 file = File("${activity?.getExternalFilesDir(null)}/photo.png")
                 val uri =
                     FileProvider.getUriForFile(requireContext(), context?.packageName!!, file!!)
-
-                userActual.coverImage=uri.toString()
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, uri)
+                userActual.coverImage=uri.toString()
                 cameralauncherCover.launch(intent)
             }
+        }
+        binding.editarNombre.setOnClickListener {
+            binding.saveEdit.visibility= View.VISIBLE
+            binding.newName.visibility= View.VISIBLE
+            binding.saveEdit.setOnClickListener {
+                if(binding.newName.text.isNotEmpty()) {
+                 userActual.name = binding.newName.text.toString()
+                    binding.personName.setText(userActual.name)
+                    binding.saveEdit.visibility= View.INVISIBLE
+                    binding.newName.visibility= View.INVISIBLE
+                    binding.editarNombre.visibility= View.INVISIBLE
+                }
+                else{
+                    Toast.makeText(activity,"Name empty", Toast.LENGTH_LONG).show()
+                }
+            }
+
         }
         // Inflate the layout for this fragment
         return view
@@ -141,7 +182,8 @@ class ProfileFragment(private val userActual:User) : Fragment() {
             val uriImage = result.data?.data
             userActual.profileImage=uriImage.toString()
             uriImage?.let {
-                binding.imageProfile.setImageURI(uriImage)
+                val bitmap = MediaStore.Images.Media.getBitmap(context?.contentResolver , uriImage)
+                binding.imageProfile.setImageBitmap(bitmap)
             }
         }else if(result.resultCode == Activity.RESULT_CANCELED){
             file = null
@@ -159,7 +201,8 @@ class ProfileFragment(private val userActual:User) : Fragment() {
             val uriImage = result.data?.data
             userActual.coverImage =uriImage.toString()
             uriImage?.let {
-                binding.coverProfile.setImageURI(uriImage)
+                val bitmap = MediaStore.Images.Media.getBitmap(context?.contentResolver , uriImage)
+                binding.coverProfile.setImageBitmap(bitmap)
             }
         }else if(result.resultCode == Activity.RESULT_CANCELED){
             file = null
@@ -173,17 +216,10 @@ class ProfileFragment(private val userActual:User) : Fragment() {
 
     private fun setAnimation(clicked:Boolean) {
         if(clicked){
-            binding.cargarImageProfile.startAnimation(toButton)
-            binding.tomarImageProfile.startAnimation(toButton)
-            binding.cargarImagePortada.startAnimation(toButton)
-            binding.tomarImagePortada.startAnimation(toButton)
+            binding.editarNombre.startAnimation(toButton)
 
         }else{
-            binding.cargarImageProfile.startAnimation(fromButton)
-            binding.tomarImageProfile.startAnimation(fromButton)
-            binding.cargarImagePortada.startAnimation(fromButton)
-            binding.tomarImagePortada.startAnimation(fromButton)
-
+            binding.editarNombre.startAnimation(fromButton)
         }
     }
     override fun onRequestPermissionsResult(
@@ -205,15 +241,9 @@ class ProfileFragment(private val userActual:User) : Fragment() {
     }
     private fun setVisibility(clicked:Boolean) {
         if(!clicked){
-            binding.cargarImageProfile.visibility= View.VISIBLE
-            binding.tomarImageProfile.visibility= View.VISIBLE
-            binding.cargarImagePortada.visibility= View.VISIBLE
-            binding.tomarImagePortada.visibility= View.VISIBLE
+            binding.editarNombre.visibility= View.VISIBLE
         }else{
-            binding.cargarImageProfile.visibility= View.INVISIBLE
-            binding.tomarImageProfile.visibility= View.INVISIBLE
-            binding.cargarImagePortada.visibility= View.INVISIBLE
-            binding.tomarImagePortada.visibility= View.INVISIBLE
+            binding.editarNombre.visibility= View.INVISIBLE
         }
     }
 
@@ -222,6 +252,7 @@ class ProfileFragment(private val userActual:User) : Fragment() {
         val json= Gson().toJson(userActual)
         val sharedPreferences = requireActivity().getPreferences(Context.MODE_PRIVATE)
         sharedPreferences.edit().putString("currentState",json).apply()
+        Log.e("USUARIO",json.toString())
     }
     override fun onResume() {
         super.onResume()
@@ -232,7 +263,8 @@ class ProfileFragment(private val userActual:User) : Fragment() {
             val currentState= Gson().fromJson(json.toString(),User::class.java)
             binding.coverProfile.setImageURI(Uri.parse(currentState.coverImage))
             binding.imageProfile.setImageURI(Uri.parse(currentState.profileImage))
-            binding.editTextTextPersonName.setText(currentState.name)
+            binding.personName.setText(currentState.name)
+            Log.e("RESUME",json.toString())
         }
     }
     override fun onDestroyView() {
